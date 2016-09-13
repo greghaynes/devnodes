@@ -1,0 +1,18 @@
+links:
+  - id: eth0
+    ethernet_mac_address: 52:54:00:8e:d3:dc
+    mtu: 1500
+  - id: eth1
+    ethernet_mac_address: 52:54:00:f8:a8:81
+    mtu: 1500
+
+networks:
+  - id: network0
+    type: ipv4
+    netmask: 255.255.255.0
+    link: eth0
+    routes:
+       - netmask: 0.0.0.0
+         network: 0.0.0.0
+         gateway: 10.10.0.1
+    ip: 10.10.0.101
