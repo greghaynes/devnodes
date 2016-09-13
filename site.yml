@@ -28,6 +28,7 @@
       dibcreate_elements:
         - ubuntu-minimal
         - simple-init
+        - growroot
         - vm
       dibcreate_dib_path: /home/greghaynes/venv/ansible/bin/disk-image-create
       dibcreate_extra_packages:
