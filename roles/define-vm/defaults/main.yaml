@@ -2,3 +2,4 @@ arch: x86_64
 cpus: 1
 engine: kvm
 memory: 4096
+nic_count: 1

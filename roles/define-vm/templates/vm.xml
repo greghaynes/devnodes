@@ -39,10 +39,12 @@
     <memballoon model='virtio'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </memballoon>
+    {% for nic_num in range(nic_count) %}
     <interface type='bridge'>
       <source bridge='{{ bridge }}' />
       <model type='virtio'/>
     </interface>
+    {% endfor %}
     <serial type='pty'>
       <target port='0'/>
     </serial>
