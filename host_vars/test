@@ -2,9 +2,11 @@ links:
   - id: eth0
     ethernet_mac_address: 52:54:00:8e:d3:dc
     mtu: 1500
+    type: phy
   - id: eth1
     ethernet_mac_address: 52:54:00:f8:a8:81
     mtu: 1500
+    type: phy
 
 networks:
   - id: network0
@@ -15,4 +17,4 @@ networks:
        - netmask: 0.0.0.0
          network: 0.0.0.0
          gateway: 10.10.0.1
-    ip: 10.10.0.101
+    ip_address: 10.10.0.101

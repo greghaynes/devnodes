@@ -30,15 +30,20 @@
         - simple-init
         - growroot
         - vm
+        - devuser
+        - enable-serial-console
       dibcreate_dib_path: /home/greghaynes/venv/ansible/bin/disk-image-create
       dibcreate_extra_packages:
         - openssh-server
+        - dialog
       dibcreate_log_dest: "{{ lookup('env','HOME') }}/devnodes/logs/dib.log"
       dibcreate_destination: "{{ lookup('env','HOME') }}/devnodes/images/image.qcow2"
       dibcreate_output_types:
         - qcow2
       dibcreate_env_vars:
         - DIB_DISTRIBUTION_MIRROR: http://ubuntu.osuosl.org/ubuntu
+        - DIB_DEV_USER_PASSWORD: devuser
+        - DIB_DEV_USER_PWDLESS_SUDO: 1
 
 - name: stat dib image
   run_once: true

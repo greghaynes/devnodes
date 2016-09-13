@@ -4,5 +4,11 @@
     "hostname": {{ hostname|to_json }}
     {% endif %},
     "links": {{ links | to_json }},
-    "networks": {{ networks | to_json }}
+    "networks": {{ networks | to_json }},
+    "services": [
+        {
+            "type": "dns",
+            "address": "8.8.8.8"
+        }
+    ]
 }

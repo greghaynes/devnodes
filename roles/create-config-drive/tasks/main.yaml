@@ -11,8 +11,8 @@
 - name: Create meta_data.json
   delegate_to: localhost
   template:
-    src: meta_data.json
-    dest: "{{ _config_drive_tmpdir.stdout }}/openstack/latest/meta_data.json"
+    src: network_info.json
+    dest: "{{ _config_drive_tmpdir.stdout }}/openstack/latest/network_info.json"
 - name: Output ISO
   delegate_to: localhost
   command: mkisofs -R -V config-2 -o "{{ destination }}" "{{ _config_drive_tmpdir.stdout }}"
