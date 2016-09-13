@@ -1,0 +1,6 @@
+dibcreate_env_vars: []
+dibcreate_extra_packages: []
+dibcreate_log_dest: /dev/null
+dibcreate_output_types: [ qcow2 ]
+dibcreate_overwrite_dest: False
+dibcreate_dib_path: disk-image-create

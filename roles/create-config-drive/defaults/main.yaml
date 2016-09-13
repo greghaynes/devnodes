@@ -1,0 +1,5 @@
+hostname: myvm
+ssh_keys: {}
+work_dir: "{{ lookup('env', 'TMPDIR') | default('/tmp', True) }}"
+destination: "{{ work_dir }}/config_drive_{{ inventory_hostname }}.iso"
+configdrive_cleanup: True

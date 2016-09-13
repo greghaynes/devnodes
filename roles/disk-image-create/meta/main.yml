@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Gregory Haynes
+  description: Create disk images using diskimage-builder
+
+  license: Apache
+
+  min_ansible_version: 1.2
+
+  galaxy_tags: []
+
+dependencies: []

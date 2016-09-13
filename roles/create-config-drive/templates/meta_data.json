@@ -1,0 +1,6 @@
+{
+    "public_keys": {{ ssh_keys|to_json }}{% if hostname|default %},
+    "name": {{ hostname|to_json }},
+    "hostname": {{ hostname|to_json }}
+    {% endif %}
+}

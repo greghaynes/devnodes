@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+      - { role: ansible-role-disk-image-create, dibcreate_elements: [ 'ubuntu-minimal' ], dibcreate_destination: '/opt/dibcreate_dest.qcow2' }

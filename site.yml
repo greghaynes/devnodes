@@ -1,0 +1,71 @@
+- name: Create diskimage directories
+  run_once: true
+  gather_facts: False
+  hosts: all
+  tasks:
+    - file: path="{{ lookup('env','HOME') }}/devnodes/config-drives" state=directory mode=0755
+      delegate_to: localhost
+    - file: path="{{ lookup('env','HOME') }}/devnodes/logs" state=directory mode=0755
+      delegate_to: localhost
+    - file: path="{{ lookup('env','HOME') }}/devnodes/images" state=directory mode=0755
+      delegate_to: localhost
+    - file: path="{{ lookup('env','HOME') }}/devnodes/disks" state=directory mode=0755
+      delegate_to: localhost
+
+- name: Create config drives
+  gather_facts: False
+  hosts: all
+  roles:
+    - role: create-config-drive
+      destination: "{{ lookup('env','HOME') }}/devnodes/config-drives/{{ inventory_hostname }}.iso"
+
+- name: Create diskimage
+  run_once: true
+  gather_facts: False
+  hosts: all
+  roles:
+    - role: disk-image-create
+      dibcreate_elements:
+        - ubuntu-minimal
+        - simple-init
+        - vm
+      dibcreate_dib_path: /home/greghaynes/venv/ansible/bin/disk-image-create
+      dibcreate_extra_packages:
+        - openssh-server
+      dibcreate_log_dest: "{{ lookup('env','HOME') }}/devnodes/logs/dib.log"
+      dibcreate_destination: "{{ lookup('env','HOME') }}/devnodes/images/image.qcow2"
+      dibcreate_output_types:
+        - qcow2
+      dibcreate_env_vars:
+        - DIB_DISTRIBUTION_MIRROR: http://ubuntu.osuosl.org/ubuntu
+
+- name: stat dib image
+  run_once: true
+  gather_facts: False
+  hosts: all
+  tasks:
+    - stat: path="{{ lookup('env','HOME') }}/devnodes/images/image.qcow2"
+      delegate_to: localhost
+      register: _dib_img_stat
+    - fail: msg="No dib image was created."
+      delegate_to: localhost
+      when: not _dib_img_stat.stat.exists
+
+- name: Create vm disk
+  gather_facts: False
+  hosts: all
+  tasks:
+    - copy: src="{{ lookup('env','HOME') }}/devnodes/images/image.qcow2" dest="{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" mode=0644 force=yes
+      delegate_to: localhost
+    - command: qemu-img resize "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" 10G
+      delegate_to: localhost
+
+- name: Define vm
+  gather_facts: False
+  hosts: all
+  roles:
+    - role: define-vm
+      config_drive_disk_path: "{{ lookup('env','HOME') }}/devnodes/config-drives/{{ inventory_hostname }}.iso"
+      disk_path: "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2"
+      name: "devnode-{{ inventory_hostname }}"
+      bridge: br-eth0

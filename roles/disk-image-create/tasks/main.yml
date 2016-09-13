@@ -1,0 +1,27 @@
+- name: Check arguments
+  delegate_to: localhost
+  fail: msg="{{ item }} is not defined"
+  when: '{{ item }} is undefined'
+  with_items:
+    - dibcreate_destination
+    - dibcreate_elements
+    - dibcreate_env_vars
+    - dibcreate_extra_packages
+    - dibcreate_output_types
+    - dibcreate_overwrite_dest
+    - dibcreate_log_dest
+    - dibcreate_dib_path
+  tags: [config-check]
+
+- name: Stat destination
+  delegate_to: localhost
+  stat: path={{ dibcreate_destination }}
+  register: _dib_dest
+
+- name: Build disk image
+  delegate_to: localhost
+  become: true
+  become_user: root
+  environment: '{{ dibcreate_env_vars }}'
+  shell: '{{ dibcreate_dib_path }} -n -t {{ dibcreate_output_types | join(",") }} -p {{ dibcreate_extra_packages | join(",") }} -o {{ dibcreate_destination }} {{ dibcreate_elements | join(" ") }}  2>&1 | tee {{ dibcreate_log_dest }}'
+  when: not _dib_dest.stat.exists or (dibcreate_overwrite_dest and _dib_dest.stat.exists)
