@@ -66,14 +66,25 @@
     - command: qemu-img resize "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" 10G
       delegate_to: localhost
 
+- name: Detect existing vm
+  gather_facts: False
+  hosts: all
+  tasks:
+    - virt: name="devnode-{{ inventory_hostname }}"
+      delegate_to: localhost
+      register: _devnode_vm
+      ignore_errors: True
+
 - name: Cleanup existing vm
   gather_facts: False
   hosts: all
   tasks:
     - virt: name="devnode-{{ inventory_hostname }}" state=destroyed
       delegate_to: localhost
+      when: not _devnode_vm.failed
     - virt: name="devnode-{{ inventory_hostname }}" command=undefine
       delegate_to: localhost
+      when: not _devnode_vm.failed
 
 - name: Define vm
   gather_facts: False

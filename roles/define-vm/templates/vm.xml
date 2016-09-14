@@ -39,7 +39,7 @@
     <memballoon model='virtio'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </memballoon>
-    {% for link in links %}
+    {% for link in devnodes.links %}
     <interface type='bridge'>
       <mac address='{{ link['ethernet_mac_address'] }}' />
       <source bridge='{{ bridge }}' />

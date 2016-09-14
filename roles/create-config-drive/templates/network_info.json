@@ -3,8 +3,8 @@
     "name": {{ hostname|to_json }},
     "hostname": {{ hostname|to_json }}
     {% endif %},
-    "links": {{ links | to_json }},
-    "networks": {{ networks | to_json }},
+    "links": {{ devnodes.links | to_json }},
+    "networks": {{ devnodes.networks | to_json }},
     "services": [
         {
             "type": "dns",
