@@ -64,7 +64,7 @@ Typical Usage
 A typical usage pattern defines a user's ssh key in a separate vars file
 (ssh-key.yaml):
 
-.. code-block: yaml
+.. code-block:: yaml
 
   devnodes:
     public_keys:
@@ -72,7 +72,7 @@ A typical usage pattern defines a user's ssh key in a separate vars file
 
 The properties for a node are defined in the node's host_vars (host_vars/test):
 
-.. code-block: yaml
+.. code-block:: yaml
 
   devnodes:
     cpus: 1
@@ -100,6 +100,6 @@ The properties for a node are defined in the node's host_vars (host_vars/test):
 Then to delete any existing devnode vm's and create new ones run site.yaml
 with the inventory, host_vars, and ssh key vars file included:
 
-.. code-block: bash
+.. code-block:: bash
 
   ansible-playbook -K -i hosts -e@ssh-key.yaml site.yaml
