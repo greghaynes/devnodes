@@ -1,4 +1,6 @@
 devnodes:
+    cpus: 1
+    memory: 512
     links:
       - id: eth0
         ethernet_mac_address: 52:54:00:8e:d3:dc
