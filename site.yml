@@ -63,7 +63,7 @@
   tasks:
     - copy: src="{{ lookup('env','HOME') }}/devnodes/images/image.qcow2" dest="{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" mode=0644 force=yes
       delegate_to: localhost
-    - command: qemu-img resize "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" 10G
+    - command: qemu-img resize "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2" {{ devnodes.disk_size }}
       delegate_to: localhost
 
 - name: Detect existing vm
@@ -79,12 +79,13 @@
   gather_facts: False
   hosts: all
   tasks:
+    - debug: msg="{{ _devnode_vm }}"
     - virt: name="devnode-{{ inventory_hostname }}" state=destroyed
       delegate_to: localhost
-      when: _devnode_vm is defined and _devnode_vm.failed is defined and not _devnode_vm.failed
+      when: _devnode_vm is defined and _devnode_vm.status is defined
     - virt: name="devnode-{{ inventory_hostname }}" command=undefine
       delegate_to: localhost
-      when: _devnode_vm is defined and _devnode_vm.failed is defined and not _devnode_vm.failed
+      when: _devnode_vm is defined and _devnode_vm.status is defined
 
 - name: Define vm
   gather_facts: False
@@ -95,3 +96,10 @@
       disk_path: "{{ lookup('env','HOME') }}/devnodes/disks/{{ inventory_hostname }}.qcow2"
       name: "devnode-{{ inventory_hostname }}"
       bridge: br-vms
+
+- name: Start vm
+  gather_facts: False
+  hosts: all
+  tasks:
+    - virt: name="devnode-{{ inventory_hostname }}" state=running
+      delegate_to: localhost
