@@ -1,3 +1,2 @@
 {
-    "public_keys": {{ devnodes.public_keys | to_json }}
 }

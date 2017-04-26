@@ -17,12 +17,6 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <disk type='file' device='cdrom'>
-      <driver name='qemu' type='raw' />
-      <source file='{{ config_drive_disk_path }}' />
-      <target dev='hdc' bus='ide' />
-      <readonly />
-    </disk>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2' />
       <source file='{{ disk_path }}' />
@@ -41,8 +35,10 @@
     </memballoon>
     {% for link in devnodes.links %}
     <interface type='bridge'>
+      {% if link.ethernet_mac_address|default(False) %}
       <mac address='{{ link['ethernet_mac_address'] }}' />
-      <source bridge='{{ bridge }}' />
+      {% endif %}
+      <source bridge='{{ link.bridge }}' />
       <model type='virtio'/>
     </interface>
     {% endfor %}
